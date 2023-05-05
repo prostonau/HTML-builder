@@ -78,10 +78,7 @@ async function copyFolder (subFolderName) {
               });
 
             }
-          );     
-          
-
-
+          );
         }
       }
       );
@@ -119,35 +116,37 @@ function createCss () {
 function editIndexBasedOnTemplate () {
   const readableStream = fs.createReadStream(path.join(__dirname, 'project-dist', 'index.html'),'utf-8');
   readableStream.on('data', content => {
-    //console.log("start");
-    //console.log("content", content);
+    // console.log('start');
+    // console.log('content', content);
+    // console.log('========================================');
     const components = path.join(__dirname,'components');
     fs.readdir(components, {withFileTypes: true}, (err, files) => {
     //console.log(files);
 
-      files.forEach( async (file) => {             
-      //console.log(`${file.name}`);
-
+      files.forEach((file) => {             
+        // console.log(`${file.name}`);
         const readableStream = fs.createReadStream(path.join(__dirname, 'components', `/${file.name}`),'utf-8');
         readableStream.on('data', data => {
           //console.log(file.name,'data', typeof data);
           //componentsData.push([file.name, data]);
           //console.log("content ", typeof content);          
+          //console.log('tut + '+ file.name);
           if (file.name === 'articles.html') content = content.replace('{{articles}}',data);
           else if (file.name === 'about.html') content = content.replace('{{about}}',data);
           else if (file.name === 'footer.html') content = content.replace('{{footer}}',data);
           else if (file.name === 'header.html') {
-            //console.log("TUtttt111")
-            //console.log("content", content)
+            // console.log('TRY TO REPLACE header');
+            // console.log("content before", content)
             content = content.split('{{header}}').join(data);
+            //console.log("content AFTER", content)
             //console.log("content_AFTER", content)
           }
-          // console.log('tut + '+ file.name);
-          // console.log("-----------------------");                
+          
+          //console.log('-----------------------');                
 
           //if (file.name === 'header.html') {
           if (content.split('{{').length === 1) {              
-            //console.log('content = ', content)
+            //console.log('We are ready to rewrite content = ', content);
             fs.writeFile(
               path.join(__dirname, 'project-dist', 'index.html'),
               content,
