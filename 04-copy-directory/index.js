@@ -11,6 +11,11 @@ fsPromises.mkdir(`${path.dirname(__filename)}/files-copy`, {'recursive': true}).
 //.catch(function() {
 //console.log('failed to create directory');    
 }).then( () => {    
+
+  const folderPath = `${path.dirname(__filename)}/files-copy`
+  clearFolder(folderPath)
+
+
   fs.readdir(testFolder, {withFileTypes: true}, (err, files) => {
     //console.log(files);
     files.forEach(file => {             
@@ -32,6 +37,20 @@ fsPromises.mkdir(`${path.dirname(__filename)}/files-copy`, {'recursive': true}).
     );
   });    
 });
+
+const clearFolder = (folderPath) => {
+  fs.readdir(folderPath, (err, files) => {
+    if (err) throw err
+    
+    files.forEach(file => {
+      const filePath = `${folderPath}/${file}`
+      fs.unlink(filePath, (err) => {
+        if (err) throw err
+        //console.log(`Deleted ${filePath}`)
+      })
+    })
+  })
+}
 
 
 

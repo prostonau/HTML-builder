@@ -48,8 +48,10 @@ fsPromises.mkdir(`${path.dirname(__filename)}/project-dist`, {'recursive': true}
 });
 
 async function copyFolder (subFolderName) {
-  await fsPromises.mkdir(`${path.dirname(__filename)}/project-dist/assets${subFolderName}`, {'recursive': true}).then(function() {  
+  await fsPromises.mkdir(`${path.dirname(__filename)}/project-dist/assets${subFolderName}`, {'recursive': true}).then(async function() {  
+     //clearFolder(`${outAssetSubFolderPath}${subFolderName}`);
   }).then( async () => {  
+
     fs.readdir(`${assetSubFolderPath}${subFolderName}`, {withFileTypes: true}, (err, files) => {
       //console.log(`${assetSubFolderPath}${subFolderName}`);
       //console.log(files);
@@ -165,4 +167,18 @@ function editIndexBasedOnTemplate () {
     });
     
   });
+}
+
+const clearFolder = (folderPath) => {
+  fs.readdir(folderPath, (err, files) => {
+    if (err) throw err
+    
+    files.forEach(file => {
+      const filePath = `${folderPath}/${file}`
+      fs.unlink(filePath, (err) => {
+        if (err) throw err
+        //console.log(`Deleted ${filePath}`)
+      })
+    })
+  })
 }
